@@ -37,3 +37,18 @@ function playMusic(array, i){
     let activeMusic = document.querySelector('.active-music audio');
     activeMusic.src = array[i].url;
 }
+
+// play or pause music
+let musicSwitch = document.querySelector('#music-switch');
+musicSwitch.onclick = playOrPause;
+function playOrPause(){
+    let status = musicSwitch.className;
+    musicSwitch.className = (status == 'on') ? 'off' : 'on';
+    let activeMusic = document.querySelector('.active-music audio');
+    if(musicSwitch.className == 'on'){
+        activeMusic.play();
+    }
+    else{
+        activeMusic.pause();
+    }
+}
