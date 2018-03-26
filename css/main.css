@@ -1,0 +1,54 @@
+#app{
+    background: #fff;
+}
+.title{
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 0.8rem;
+    background: #d43c33;
+    font-size: 0.3rem;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.musicList{
+    margin-top: 0.8rem;
+}
+.music{
+    height: 0.6rem;
+    border-bottom: 1px solid #ddd;
+    padding: 0.1rem;
+    display: flex;
+    align-items: center;
+}
+.music:last-child{
+    border: none;
+}
+.music img{
+    height: 100%;
+}
+.info{
+    height: 100%;
+    margin-left: 0.2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.music-title{
+    font-size: 0.18rem;
+    color: #333;
+}
+.music-singer{
+    font-size: 0.12rem;
+    color: #999;
+}
+.activeMusic{
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 0.8rem;
+    background: #fff;
+    box-shadow: 0 -1px 5px #bbb;
+}
