@@ -1,17 +1,25 @@
 // get music source
-let musicList;
+let staticMusicList = [];
+let activeMusicList = [];
 let xhr = new XMLHttpRequest();
 xhr.open('get', 'src/music.json', true);
 xhr.send();
 xhr.onload = function(){
-    musicList = JSON.parse(this.responseText);
-    musicElement(musicList);
+    staticMusicList = JSON.parse(this.responseText);
+    musicElement(staticMusicList);
     let allMusic = document.querySelectorAll('.music');
     allMusic.forEach((music, index) => {
         music.onclick = () => {
-            playMusic(musicList, index);
+            playMusic(staticMusicList, index);
+            musicStatus = true;
+            checkMusicStatus();
         };
     });
+    let playAll = document.querySelector('.play-music-list');
+    playAll.onclick = () => {
+        addMusic(activeMusicList, staticMusicList);
+        playActiveList(activeMusicList);
+    };
 };
 
 // create music element
@@ -36,19 +44,53 @@ function musicElement(list){
 function playMusic(array, i){
     let activeMusic = document.querySelector('.active-music audio');
     activeMusic.src = array[i].url;
+    let activeImg = document.querySelector('.active-music img');
+    activeImg.src = array[i].image;
+    let activeTitle = document.querySelector('.active-info .active-title');
+    let activeSinger = document.querySelector('.active-info .active-singer');
+    activeTitle.innerHTML = array[i].title;
+    activeSinger.innerHTML = array[i].singer;
 }
 
 // play or pause music
+let audioPlayer = document.querySelector('.active-music audio');
 let musicSwitch = document.querySelector('#music-switch');
+let musicStatus = false;
 musicSwitch.onclick = playOrPause;
 function playOrPause(){
-    let status = musicSwitch.className;
-    musicSwitch.className = (status == 'on') ? 'off' : 'on';
-    let activeMusic = document.querySelector('.active-music audio');
-    if(musicSwitch.className == 'on'){
-        activeMusic.play();
+    musicStatus = !musicStatus;
+    checkMusicStatus();
+}
+function checkMusicStatus(){
+    if(musicStatus){
+        musicSwitch.children[0].className = 'fa fa-pause-circle-o';
+        audioPlayer.play();
     }
     else{
-        activeMusic.pause();
+        musicSwitch.children[0].className = 'fa fa-play-circle-o';
+        audioPlayer.pause();
+    }
+}
+
+// play in order automatically
+function playNext(){
+    
+}
+function playActiveList(activeList){
+    audioPlayer.src = activeList[0].url;
+    audioPlayer.addEventListener('pause');
+}
+
+// add music to active list
+function addMusic(target, source){
+    if(Array.isArray(source)){
+        //清空数组
+        target.length = 0;
+        source.forEach((item) => {
+            target.push(item);
+        });
+    }
+    else{
+        target.push(source);
     }
 }

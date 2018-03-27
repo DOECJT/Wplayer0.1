@@ -7,10 +7,17 @@
     <title>Wplayer</title>
     <link rel="stylesheet" href="css/common.css">
     <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
     <div id="app">
         <div class="title">Music</div>
+        <div class="play-music-list">
+            <div class="btn">
+                <span class="fa fa-play-circle"></span>
+            </div>
+            <div class="text">Play all music in the list.</div>
+        </div>
         <div class="musicList"></div>
         <div class="active-music">
             <img src="images/music_img_1.png" alt="">
@@ -18,7 +25,9 @@
                 <div class="active-title">music title</div>
                 <div class="active-singer">music singer</div>
             </div>
-            <div id="music-switch" class="on"></div>
+            <div id="music-switch" class="off">
+                <span class="fa fa-play-circle-o"></span>
+            </div>
             <audio src="" autoplay></audio>
         </div>
     </div>
