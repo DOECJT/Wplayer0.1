@@ -1,26 +1,46 @@
-// get music source
+let url = 'src/music.json';
 let staticMusicList = [];
 let activeMusicList = [];
-let xhr = new XMLHttpRequest();
-xhr.open('get', 'src/music.json', true);
-xhr.send();
-xhr.onload = function(){
-    staticMusicList = JSON.parse(this.responseText);
+let audioPlayer = document.querySelector('audio');
+let musicIndex = 0;
+
+getMusic(url).then((response) => {
+    staticMusicList = JSON.parse(response);
     musicElement(staticMusicList);
+    return staticMusicList;
+}).then((staticMusicList) => {
     let allMusic = document.querySelectorAll('.music');
-    allMusic.forEach((music, index) => {
-        music.onclick = () => {
-            playMusic(staticMusicList, index);
-            musicStatus = true;
-            checkMusicStatus();
+    allMusic.forEach((item, index) => {
+        item.addEventListener('click', () => {
+            addMusic(activeMusicList, staticMusicList[index]);
+            playMusic(activeMusicList, musicIndex);
+            audioPlayer.addEventListener('ended', () => {
+                musicIndex = musicIndex + 1;
+                console.log(musicIndex);
+                playMusic(activeMusicList, musicIndex);
+            });
+        });
+    });
+});
+
+// get music source
+function getMusic(url){
+    return new Promise((resolve, reject) => {
+        let XHR = new XMLHttpRequest();
+        XHR.open('get', url, true);
+        XHR.send();
+        XHR.onreadystatechange = () => {
+            if(XHR.readyState == 4){
+                if(XHR.status == 200){
+                    resolve(XHR.responseText);
+                }
+                else{
+                    reject();
+                }
+            }
         };
     });
-    let playAll = document.querySelector('.play-music-list');
-    playAll.onclick = () => {
-        addMusic(activeMusicList, staticMusicList);
-        playActiveList(activeMusicList);
-    };
-};
+}
 
 // create music element
 function musicElement(list){
@@ -40,23 +60,18 @@ function musicElement(list){
     musicList.innerHTML = musicHtml;
 }
 
-// play music
-function playMusic(array, i){
-    let activeMusic = document.querySelector('.active-music audio');
-    activeMusic.src = array[i].url;
-    let activeImg = document.querySelector('.active-music img');
-    activeImg.src = array[i].image;
-    let activeTitle = document.querySelector('.active-info .active-title');
-    let activeSinger = document.querySelector('.active-info .active-singer');
-    activeTitle.innerHTML = array[i].title;
-    activeSinger.innerHTML = array[i].singer;
+// play list
+// audioPlayer.addEventListener('end', () => {
+//     musicIndex++;
+//     playMusic(musicList, musicIndex);
+// });
+function playMusic(musicList, musicIndex){
+    audioPlayer.src = musicList[musicIndex].url;
 }
 
-// play or pause music
-let audioPlayer = document.querySelector('.active-music audio');
-let musicSwitch = document.querySelector('#music-switch');
-let musicStatus = false;
-musicSwitch.onclick = playOrPause;
+// let musicSwitch = document.querySelector('#music-switch');
+// let musicStatus = false;
+// musicSwitch.onclick = playOrPause;
 function playOrPause(){
     musicStatus = !musicStatus;
     checkMusicStatus();
@@ -91,6 +106,6 @@ function addMusic(target, source){
         });
     }
     else{
-        target.push(source);
+        target.unshift(source);
     }
 }
